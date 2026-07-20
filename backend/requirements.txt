@@ -28,3 +28,4 @@ streamlit==1.48.1
 
 groq>=0.28.0
 psycopg2-binary==2.9.10
+tavily-python>=0.3.0
