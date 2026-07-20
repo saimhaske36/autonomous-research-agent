@@ -10,6 +10,12 @@ An enterprise-grade, autonomous multi-agent research platform. **ResearchX.AI** 
 
 ---
 
+## 🌐 Live Application Link
+
+- 🚀 **Live Production Application**: [https://researchx-ai-89i0.onrender.com/](https://researchx-ai-89i0.onrender.com/)
+
+---
+
 ## 🌟 Key Features
 
 ### 🤖 Autonomous LangGraph Agent Network
@@ -41,12 +47,32 @@ An enterprise-grade, autonomous multi-agent research platform. **ResearchX.AI** 
 ## 🏗️ Architecture & Data Flow
 
 ```mermaid
-graph TD
-    A[Frontend Dashboard: index.html] -->|HTTP Requests| B[FastAPI Backend: app.main]
-    C[Admin Console: admin.html] -->|HTTP Requests| B
-    B -->|SQLAlchemy ORM| D[(PostgreSQL / SQLite)]
-    B -->|LangGraph Workflows| E[LLM Providers: Groq Llama 3.3]
-    E -->|Scraped Web Content| B
+flowchart TD
+    subgraph Client ["🖥️ User Client Layer"]
+        A[User Input / Dashboard]
+    end
+
+    subgraph API ["⚡ API Gateway & Security"]
+        B[FastAPI Router /api/v1]
+        C[JWT Auth & Input Validation]
+    end
+
+    subgraph Agents ["🧠 LangGraph Multi-Agent Orchestration"]
+        D[Planner Agent] --> E[Search Agent / Tavily API]
+        E --> F[Reader Agent / Scraper]
+        F --> G[Analyst Agent / Groq LLM]
+        G --> H[Writer Agent / Report Generator]
+    end
+
+    subgraph Data ["🐘 Storage & Database Layer"]
+        I[(PostgreSQL Database)]
+    end
+
+    A -->|1. Submit Research Topic| B
+    B -->|2. Verify Token & Body| C
+    C -->|3. Dispatch Job Thread| D
+    H -->|4. Persist Jobs, Findings & Reports| I
+    I -->|5. Render Completed Report| A
 ```
 
 ---
@@ -74,13 +100,8 @@ cd autonomous-research-agent
 
 ### 2. Set Up Virtual Environment & Dependencies
 ```bash
-# Create virtual environment
 python -m venv .venv
-
-# Activate environment (Windows)
 .\.venv\Scripts\activate
-
-# Install dependencies
 pip install -r backend/requirements.txt
 ```
 
@@ -94,46 +115,22 @@ DEBUG=True
 API_PREFIX=/api/v1
 
 # Database Configuration (PostgreSQL or SQLite)
-DATABASE_URL=postgresql://postgres:password@localhost:5432/research_db
-# Or for SQLite: DATABASE_URL=sqlite:///./research.db
+DATABASE_URL=postgresql://user:password@localhost:5432/research_db
 
 # LLM Keys
 GROQ_API_KEY=your_groq_api_key
 GROQ_MODEL=llama-3.3-70b-versatile
 LLM_PROVIDER=groq
 TAVILY_API_KEY=your_tavily_api_key
-
-# Admin Credentials
-ADMIN_USERNAME=saimhaske36@gmail.com
-ADMIN_PASSWORD=Pass@12345
 JWT_SECRET_KEY=your_custom_jwt_secret_key
 ```
 
 ### 4. Run the Application
-Start the FastAPI server (it automatically serves both the backend API and frontend interfaces):
+Start the FastAPI server:
 
 ```bash
 uvicorn app.main:app --reload --cwd backend
 ```
-
----
-
-## 🌐 Application Access Points
-
-- **User Portal**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-- **Admin Console**: [http://127.0.0.1:8000/admin.html](http://127.0.0.1:8000/admin.html)
-- **FastAPI Interactive Docs**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-
----
-
-## 🚀 Live Cloud Deployment (Render.com)
-
-1. Push your repository to GitHub.
-2. Create a Managed PostgreSQL Database on [Render.com](https://render.com).
-3. Create a **Web Service** on Render connected to your repo:
-   - **Build Command**: `pip install -r backend/requirements.txt`
-   - **Start Command**: `cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-4. Set Environment Variables in Render dashboard (`DATABASE_URL`, `GROQ_API_KEY`, etc.).
 
 ---
 
