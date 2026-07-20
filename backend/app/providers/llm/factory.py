@@ -16,18 +16,19 @@ settings = get_settings()
 
 
 class LLMFactory:
+    _provider_logged = False
 
     @staticmethod
     def get_provider():
 
         settings = get_settings()
 
-
-
         provider = (
             settings.LLM_PROVIDER.lower()
         )
-        print(f"Using LLM Provider: {provider}")
+        if not LLMFactory._provider_logged:
+            print(f"Using LLM Provider: {provider}")
+            LLMFactory._provider_logged = True
 
         if provider == "groq":
 

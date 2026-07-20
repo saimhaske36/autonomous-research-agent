@@ -38,9 +38,26 @@ analyst = AnalystAgent()
 
 writer = WriterAgent()
 
+from app.core.database import SessionLocal
+from app.models.research_job import ResearchJob
+
+def update_job_status(job_id: str, status: str, progress: int):
+    db = SessionLocal()
+    try:
+        job = db.query(ResearchJob).filter(ResearchJob.id == job_id).first()
+        if job:
+            job.status = status
+            job.progress = progress
+            db.commit()
+    except Exception as e:
+        print(f"Error updating job progress: {e}")
+    finally:
+        db.close()
+
 def planner_node(
     state: ResearchState
 ):
+    update_job_status(state["job_id"], "planning", 20)
     state["status"] = "planning"
     return planner.run(state)
 
@@ -48,27 +65,32 @@ def planner_node(
 def search_node(
     state: ResearchState
 ):
+    update_job_status(state["job_id"], "collecting_sources", 40)
     state["status"] = "collecting_sources"
     return search.run(state)
 
 def reader_node(
     state: ResearchState
 ):
+    update_job_status(state["job_id"], "extracting_findings", 60)
     state["status"] = "extracting_findings"
     return reader.run(state)
 
 def analyst_node(
     state: ResearchState
 ):
+    update_job_status(state["job_id"], "analyzing", 80)
     state["status"] = "analyzing"
     return analyst.run(state)
 
 def writer_node(
     state: ResearchState
 ):
+    update_job_status(state["job_id"], "generating_report", 90)
     state["status"] = "generating_report"
     state = writer.run(state)
     state["status"] = "completed"
+    update_job_status(state["job_id"], "completed", 100)
 
     return state
 

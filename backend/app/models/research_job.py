@@ -13,6 +13,7 @@ class ResearchJob(Base):
     __tablename__ = "research_jobs"
 
     id = Column(String, primary_key=True, index=True)
+    user_id = Column(String, nullable=True, index=True)
 
     topic = Column(String, nullable=False)
 

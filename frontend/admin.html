@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Console - ResearchX.AI</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Marked.js (Markdown Parser) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css?v=2">
+    <style>
+        /* Specific tweaks for admin portal centered card */
+        .admin-login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #020617;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .admin-login-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 3rem 2.5rem;
+            border-radius: var(--border-radius-lg);
+            background: rgba(13, 20, 35, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Login Screen Overlay -->
+    <div id="admin-login-screen" class="login-overlay">
+        <div class="auth-container-split">
+            <!-- Left Side Teaser (Admin Branded) -->
+            <div class="auth-teaser" style="background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);">
+                <div class="teaser-content">
+                    <span class="teaser-tag" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;"><i data-lucide="shield"></i> Administrative Access</span>
+                    <h1 class="teaser-title">System Administration Console</h1>
+                    <p class="teaser-desc">Manage profiles, audit multi-agent research operations, view real-time statistics, and control user access across the system.</p>
+                    
+                    <div class="teaser-features">
+                        <div class="teaser-feature">
+                            <div class="teaser-feature-icon" style="background: rgba(168, 85, 247, 0.1); color: #c084fc;">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <div class="teaser-feature-text">
+                                <strong>User Management</strong>
+                                <span>Terminate, block/suspend, or reactivate user profiles with instant database guard propagation.</span>
+                            </div>
+                        </div>
+                        <div class="teaser-feature">
+                            <div class="teaser-feature-icon" style="background: rgba(168, 85, 247, 0.1); color: #c084fc;">
+                                <i data-lucide="eye"></i>
+                            </div>
+                            <div class="teaser-feature-text">
+                                <strong>Operational Auditing</strong>
+                                <span>Review every run, inspect collected resources, and view generated final intelligence reports.</span>
+                            </div>
+                        </div>
+                        <div class="teaser-feature">
+                            <div class="teaser-feature-icon" style="background: rgba(168, 85, 247, 0.1); color: #c084fc;">
+                                <i data-lucide="sliders"></i>
+                            </div>
+                            <div class="teaser-feature-text">
+                                <strong>Console Settings</strong>
+                                <span>Dynamically modify admin credentials and configure environment parameters in real-time.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side Auth Card -->
+            <div class="auth-card-wrapper">
+                <div class="admin-login-card glass-card" style="margin: 0; box-shadow: none; border: none; background: transparent; width: 100%; max-width: 420px; text-align: center;">
+                    <div class="login-header">
+                        <div class="login-logo-wrapper" style="background: rgba(168, 85, 247, 0.1); color: #a855f7; margin: 0 auto 1.5rem auto;">
+                            <i data-lucide="shield" class="login-logo-svg"></i>
+                        </div>
+                        <h2>Admin Portal</h2>
+                        <p>Verify administrative credentials to audit the research platform</p>
+                    </div>
+                    <div class="login-body">
+                        <div id="admin-login-error-msg" class="login-error hidden">Invalid admin credentials. Access Denied.</div>
+                        <div class="form-group text-left" style="text-align: left;">
+                            <label for="admin-username">Email Address</label>
+                            <input type="email" id="admin-username" placeholder="Enter admin email address" autocomplete="email">
+                        </div>
+                        <div class="form-group mt-3 text-left" style="text-align: left;">
+                            <label for="admin-password">Password</label>
+                            <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                                <input type="password" id="admin-password" placeholder="Admin password" autocomplete="current-password" style="width: 100%; padding-right: 2.5rem;">
+                                <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('admin-password', this)" style="position: absolute; right: 0.75rem; background: none; border: none; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                    <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button id="admin-login-btn" class="btn btn-primary btn-block mt-4" style="background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);">
+                            <span>Access Console</span>
+                            <i data-lucide="shield-alert"></i>
+                        </button>
+                        <p class="auth-toggle-text mt-3 text-center text-sm text-muted">
+                            Not an admin? <a href="index.html" class="auth-toggle-link" style="color: #a855f7; font-weight: 500;">User Portal &rarr;</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Gradient Spheres -->
+    <div class="bg-sphere sphere-1" style="background: #a855f7;"></div>
+    <div class="bg-sphere sphere-2" style="background: #6366f1;"></div>
+
+    <div class="app-container hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon-wrapper" style="background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%); box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);">
+                        <i data-lucide="shield" class="logo-icon-svg"></i>
+                    </div>
+                    <span class="logo-text">System Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <i data-lucide="bar-chart-2"></i>
+                    <span>Master Stats</span>
+                </a>
+                <a href="#" class="nav-item" data-view="audit">
+                    <i data-lucide="database"></i>
+                    <span>All User Jobs</span>
+                </a>
+                <a href="#" class="nav-item" data-view="settings">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <span class="status-dot online"></span>
+                    <span>Admin Session Live</span>
+                </div>
+                <a href="#" id="admin-logout-btn" class="logout-link mt-3">
+                    <i data-lucide="log-out"></i>
+                    <span>Exit Console</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="page-title-container">
+                    <h1 id="current-view-title">Master Stats</h1>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar" id="user-avatar-initials" style="background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%); box-shadow: 0 4px 10px rgba(168, 85, 247, 0.25);">AD</div>
+                    <div class="user-info">
+                        <span class="user-name" id="user-profile-name">Administrator</span>
+                        <span class="user-role">System-Wide Access</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div class="view-viewport">
+                
+                <!-- VIEW: DASHBOARD -->
+                <section id="view-dashboard" class="view-section active">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper blue">
+                                <i data-lucide="folder-search"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Total System Jobs</span>
+                                <h3 id="stat-total-jobs" class="stat-value">0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper purple">
+                                <i data-lucide="globe"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Total Sources Collected</span>
+                                <h3 id="stat-total-sources" class="stat-value">0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper green">
+                                <i data-lucide="lightbulb"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Total Findings Extracted</span>
+                                <h3 id="stat-total-findings" class="stat-value">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Overview Card -->
+                    <div class="glass-card mt-4">
+                        <div class="card-header">
+                            <h3 class="card-title">Audit Log Console</h3>
+                            <p class="text-muted text-sm mt-1">This console has total administrative access. You can review all generated final summaries and inspect source databases across all user accounts.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: AUDIT -->
+                <section id="view-audit" class="view-section">
+                    <!-- SUB-PANEL: USERS LIST -->
+                    <div id="audit-users-panel" class="glass-card">
+                        <div class="card-header border-bottom">
+                            <h3 class="card-title">Registered System Users</h3>
+                            <p class="text-muted text-sm mt-1">Select a user profile below to inspect their research history and files.</p>
+                        </div>
+                        <div id="legacy-jobs-banner" class="hidden" style="margin: 1.5rem; padding: 1.25rem; background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: var(--border-radius-md); display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <i data-lucide="archive" style="color: #a855f7;"></i>
+                                <div style="text-align: left;">
+                                    <strong style="color: #fff; font-size: 0.95rem;">Legacy / Guest Runs</strong>
+                                    <p class="text-muted text-sm" style="margin: 0.25rem 0 0 0;" id="legacy-jobs-count-text">There are 0 legacy research runs in the system.</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" id="audit-legacy-btn" onclick="inspectUserJobs('admin', 'Unassigned / Legacy')">
+                                <i data-lucide="eye" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 4px;"></i>
+                                <span>Audit Legacy Runs</span>
+                            </button>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="custom-table" id="audit-users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Password (Hash)</th>
+                                        <th>Status</th>
+                                        <th>Account Created</th>
+                                        <th>Research Jobs Count</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="audit-users-tbody">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Loading users list...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL: USER JOBS DETAIL (Initially Hidden) -->
+                    <div id="audit-jobs-panel" class="glass-card mt-3 hidden">
+                        <div class="card-header border-bottom">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <h3 class="card-title" id="audit-jobs-title">User Research Jobs</h3>
+                                    <p class="text-muted text-sm mt-1">Reviewing individual runs for selected profile.</p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="audit-back-to-users-btn">
+                                    <i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i>
+                                    <span>Back to Users List</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="custom-table" id="audit-jobs-table">
+                                <thead>
+                                    <tr>
+                                        <th>Job ID</th>
+                                        <th>Topic</th>
+                                        <th>Status</th>
+                                        <th>Sources</th>
+                                        <th>Findings</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="audit-jobs-tbody">
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Select a user to audit.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: REPORT (Detail Viewer Modal Inside Portal) -->
+                <section id="view-report" class="view-section">
+                    <div class="report-container">
+                        <!-- Report Top Action Bar -->
+                        <div class="report-action-bar mb-4">
+                            <a href="#" id="report-back-btn" class="back-link">
+                                <i data-lucide="arrow-left"></i>
+                                <span>Back to Audit Table</span>
+                            </a>
+                            <div class="report-actions-group">
+                                <button class="btn btn-primary" id="report-download-pdf-btn">
+                                    <i data-lucide="download"></i>
+                                    <span>Download Report PDF</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Report Header -->
+                        <div class="report-header-card glass-card p-4 mb-4">
+                            <span class="report-badge">SYSTEM SYNTHESIS REPORT</span>
+                            <h2 id="report-topic-heading" class="mt-2">Quantum computing trends</h2>
+                            <p class="text-muted text-sm mt-1">Job Reference Identifier: <code id="report-job-id-text">N/A</code></p>
+                        </div>
+
+                        <!-- Report Content Grid -->
+                        <div class="report-content-grid">
+                            <!-- Left: Detailed Tabs -->
+                            <div class="glass-card report-tabs-card">
+                                <div class="tab-headers">
+                                    <button class="tab-btn active" data-tab="summary">
+                                        <i data-lucide="file-text"></i>
+                                        <span>Executive Summary</span>
+                                    </button>
+                                    <button class="tab-btn" data-tab="findings">
+                                        <i data-lucide="lightbulb"></i>
+                                        <span>Extracted Facts (<span id="tab-count-findings">0</span>)</span>
+                                    </button>
+                                    <button class="tab-btn" data-tab="sources">
+                                        <i data-lucide="globe"></i>
+                                        <span>Verified Sources (<span id="tab-count-sources">0</span>)</span>
+                                    </button>
+                                </div>
+                                <div class="tab-body mt-4">
+                                    <!-- TAB PANE: EXECUTIVE SUMMARY -->
+                                    <div class="tab-pane active" id="tab-pane-summary">
+                                        <div id="report-summary-text" class="summary-markdown">
+                                            <!-- Dynamically Populated -->
+                                        </div>
+                                    </div>
+
+                                    <!-- TAB PANE: FINDINGS -->
+                                    <div class="tab-pane" id="tab-pane-findings">
+                                        <div id="report-findings-container" class="findings-list">
+                                            <!-- Dynamically Populated -->
+                                        </div>
+                                    </div>
+
+                                    <!-- TAB PANE: SOURCES -->
+                                    <div class="tab-pane" id="tab-pane-sources">
+                                        <div id="report-sources-container" class="sources-list">
+                                            <!-- Dynamically Populated -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Strategic Intelligence Matrix -->
+                            <div class="glass-card report-matrix-card">
+                                <div class="card-header border-bottom">
+                                    <h3 class="card-title">Strategic Insights</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="matrix-section">
+                                        <h4 class="matrix-title text-primary"><i data-lucide="trending-up" class="mr-2"></i>Key Trends</h4>
+                                        <ul class="matrix-list mt-2" id="report-trends-list">
+                                            <!-- Dynamically Populated -->
+                                        </ul>
+                                    </div>
+                                    <div class="matrix-section mt-4">
+                                        <h4 class="matrix-title text-success"><i data-lucide="zap" class="mr-2"></i>Opportunities</h4>
+                                        <ul class="matrix-list mt-2" id="report-opportunities-list">
+                                            <!-- Dynamically Populated -->
+                                        </ul>
+                                    </div>
+                                    <div class="matrix-section mt-4">
+                                        <h4 class="matrix-title text-danger"><i data-lucide="alert-triangle" class="mr-2"></i>Threats & Risks</h4>
+                                        <ul class="matrix-list mt-2" id="report-risks-list">
+                                            <!-- Dynamically Populated -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: SETTINGS -->
+                <section id="view-settings" class="view-section">
+                    <div class="glass-card" style="max-width: 600px; margin: 2rem auto; padding: 2rem;">
+                        <div class="card-header border-bottom" style="padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <h3 class="card-title">Console Security & Profile Settings</h3>
+                            <p class="text-muted text-sm mt-1">Configure your administrative access credentials. Modifying these values updates your environment parameters permanently.</p>
+                        </div>
+                        <div class="card-body">
+                            <div id="settings-success-msg" class="badge badge-success mb-3 hidden" style="padding: 0.75rem 1rem; display: block; text-align: center; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #22c55e; border-radius: 6px; margin-bottom: 1rem;">Admin profile updated successfully!</div>
+                            <div id="settings-error-msg" class="login-error mb-3 hidden" style="padding: 0.75rem 1rem; display: block; text-align: center; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #ef4444; border-radius: 6px; margin-bottom: 1rem;">Failed to save settings.</div>
+                            
+                            <form id="admin-profile-form" onsubmit="event.preventDefault(); handleUpdateAdminProfile();">
+                                <div class="form-group text-left" style="text-align: left; margin-bottom: 1.25rem;">
+                                    <label for="settings-admin-username" style="display: block; margin-bottom: 0.5rem; color: #fff; font-weight: 500; font-size: 0.9rem;">New Admin Email Address</label>
+                                    <input type="email" id="settings-admin-username" placeholder="Enter new admin email address" required style="width: 100%; padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff;">
+                                </div>
+                                <div class="form-group text-left" style="text-align: left; margin-bottom: 1.25rem;">
+                                    <label for="settings-admin-password" style="display: block; margin-bottom: 0.5rem; color: #fff; font-weight: 500; font-size: 0.9rem;">New Admin Password</label>
+                                    <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                                        <input type="password" id="settings-admin-password" placeholder="Enter new password" required style="width: 100%; padding: 0.75rem; padding-right: 2.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff;">
+                                        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('settings-admin-password', this)" style="position: absolute; right: 0.75rem; background: none; border: none; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                            <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group text-left" style="text-align: left; margin-bottom: 1.5rem;">
+                                    <label for="settings-admin-confirm" style="display: block; margin-bottom: 0.5rem; color: #fff; font-weight: 500; font-size: 0.9rem;">Confirm New Password</label>
+                                    <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                                        <input type="password" id="settings-admin-confirm" placeholder="Confirm new password" required style="width: 100%; padding: 0.75rem; padding-right: 2.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff;">
+                                        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('settings-admin-confirm', this)" style="position: absolute; right: 0.75rem; background: none; border: none; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                            <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%); width: 100%;">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px; margin-right: 6px; vertical-align: middle;"></i>
+                                    <span>Update Administrative Profile</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Script File -->
+    <script src="admin.js?v=6"></script>
+</body>
+</html>

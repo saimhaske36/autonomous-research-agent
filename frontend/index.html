@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchX.AI - Autonomous Intelligence Platform</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Marked.js (Markdown Parser) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+    <!-- Login Screen Overlay -->
+    <div id="login-screen" class="login-overlay">
+        <div class="auth-container-split">
+            <!-- Left Side Teaser -->
+            <div class="auth-teaser">
+                <div class="teaser-content">
+                    <span class="teaser-tag"><i data-lucide="shield"></i> Enterprise Grade</span>
+                    <h1 class="teaser-title">Autonomous Multi-Agent Research System</h1>
+                    <p class="teaser-desc">Synthesize professional intelligence, analyze market forces, SWOT indicators, and generate production reports in seconds using coordinated agent networks.</p>
+                    
+                    <div class="teaser-features">
+                        <div class="teaser-feature">
+                            <div class="teaser-feature-icon">
+                                <i data-lucide="network"></i>
+                            </div>
+                            <div class="teaser-feature-text">
+                                <strong>LangGraph Orchestration</strong>
+                                <span>Coordinated agent cycles mapping queries, resources, and report compiling.</span>
+                            </div>
+                        </div>
+                        <div class="teaser-feature">
+                            <div class="teaser-feature-icon">
+                                <i data-lucide="database"></i>
+                            </div>
+                            <div class="teaser-feature-text">
+                                <strong>Secure SQLite Store</strong>
+                                <span>Encrypted database storage caching findings, logs, and user credentials.</span>
+                            </div>
+                        </div>
+                        <div class="teaser-feature">
+                            <div class="teaser-feature-icon">
+                                <i data-lucide="file-text"></i>
+                            </div>
+                            <div class="teaser-feature-text">
+                                <strong>Marked PDF Delivery</strong>
+                                <span>Instant markdown document styling and production executive summary printing.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side Login Forms -->
+            <div class="auth-form-panel">
+                <div class="login-card glass-card">
+                    <!-- LOGIN PANEL -->
+                    <div id="login-panel">
+                        <div class="login-header">
+                            <div class="login-logo-wrapper">
+                                <i data-lucide="lock" class="login-logo-svg"></i>
+                            </div>
+                            <h2>Welcome Back</h2>
+                            <p>Sign in to access your research dashboard</p>
+                        </div>
+                        <div class="login-body">
+                            <div id="login-error-msg" class="login-error hidden">Invalid credentials. Please try again.</div>
+                            <div class="form-group">
+                                <label for="login-username">Email Address</label>
+                                <input type="email" id="login-username" placeholder="Enter email address" autocomplete="email">
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="login-password">Password</label>
+                                <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                                    <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" style="width: 100%; padding-right: 2.5rem;">
+                                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('login-password', this)" style="position: absolute; right: 0.75rem; background: none; border: none; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                        <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-right" style="text-align: right; margin-top: 0.5rem;">
+                                <a href="#" id="forgot-password-link" style="color: #a855f7; font-size: 0.85rem; text-decoration: none;">Forgot Password?</a>
+                            </div>
+                            <button id="login-btn" class="btn btn-primary btn-block mt-4">
+                                <span>Sign In</span>
+                                <i data-lucide="log-in"></i>
+                            </button>
+                            <p class="auth-toggle-text mt-3 text-center text-sm text-muted">
+                                Don't have an account? <a href="#" id="toggle-to-signup" class="auth-toggle-link">Sign Up</a>
+                            </p>
+                            <p class="auth-toggle-text mt-2 text-center text-xs text-muted" style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.85;">
+                                System Administrator? <a href="admin.html" class="auth-toggle-link" style="color: #a855f7; font-weight: 500;">Admin Portal &rarr;</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- SIGNUP PANEL -->
+                    <div id="signup-panel" class="hidden">
+                        <div class="login-header">
+                            <div class="login-logo-wrapper">
+                                <i data-lucide="user-plus" class="login-logo-svg"></i>
+                            </div>
+                            <h2>Create Account</h2>
+                            <p>Register a new user to access the platform</p>
+                        </div>
+                        <div class="login-body">
+                            <div id="signup-error-msg" class="login-error hidden">Registration error.</div>
+                            <div id="signup-success-msg" class="badge badge-success btn-block mb-3 hidden" style="padding: 0.75rem 1rem; display: block; text-align: center;">Registration successful! Log in...</div>
+                            <div class="form-group">
+                                <label for="signup-username">Username</label>
+                                <input type="text" id="signup-username" placeholder="Choose a username" autocomplete="username">
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="signup-email">Email Address</label>
+                                <input type="email" id="signup-email" placeholder="Enter email address" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="signup-password">Password</label>
+                                <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                                    <input type="password" id="signup-password" placeholder="Create a password" autocomplete="new-password" style="width: 100%; padding-right: 2.5rem;">
+                                    <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('signup-password', this)" style="position: absolute; right: 0.75rem; background: none; border: none; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                        <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength-container mt-2" style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem;">
+                                    <div class="strength-bar-wrapper" style="display: flex; gap: 4px; width: 100%; height: 5px;">
+                                        <div id="strength-bar-1" class="strength-bar-segment" style="flex: 1; background: rgba(255, 255, 255, 0.1); border-radius: 2px; transition: background 0.3s ease;"></div>
+                                        <div id="strength-bar-2" class="strength-bar-segment" style="flex: 1; background: rgba(255, 255, 255, 0.1); border-radius: 2px; transition: background 0.3s ease;"></div>
+                                        <div id="strength-bar-3" class="strength-bar-segment" style="flex: 1; background: rgba(255, 255, 255, 0.1); border-radius: 2px; transition: background 0.3s ease;"></div>
+                                    </div>
+                                    <span id="strength-label" class="strength-label" style="font-size: 0.75rem; color: #94a3b8; text-align: left; display: block;">Complexity: Empty</span>
+                                </div>
+                            </div>
+                            <button id="signup-btn" class="btn btn-primary btn-block mt-4">
+                                <span>Register</span>
+                                <i data-lucide="user-plus"></i>
+                            </button>
+                            <p class="auth-toggle-text mt-3 text-center text-sm text-muted">
+                                Already have an account? <a href="#" id="toggle-to-login" class="auth-toggle-link">Sign In</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Gradient Spheres -->
+    <div class="bg-sphere sphere-1"></div>
+    <div class="bg-sphere sphere-2"></div>
+
+    <div class="app-container hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon-wrapper">
+                        <i data-lucide="cpu" class="logo-icon-svg"></i>
+                    </div>
+                    <span class="logo-text">ResearchX.AI</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="new-research">
+                    <i data-lucide="search"></i>
+                    <span>New Research</span>
+                </a>
+                <a href="#" class="nav-item" data-view="archive">
+                    <i data-lucide="archive"></i>
+                    <span>Research Archive</span>
+                </a>
+                <a href="#" class="nav-item" data-view="analytics">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span>Analytics</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <span class="status-dot online"></span>
+                    <span>API Connected</span>
+                </div>
+                <a href="#" id="sidebar-logout-btn" class="logout-link mt-3">
+                    <i data-lucide="log-out"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="page-title-container">
+                    <h1 id="current-view-title">Dashboard</h1>
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar" id="user-avatar-initials">AD</div>
+                    <div class="user-info">
+                        <span class="user-name" id="user-profile-name">Admin</span>
+                        <span class="user-role">Authorized Session</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div class="view-viewport">
+                
+                <!-- VIEW: DASHBOARD -->
+                <section id="view-dashboard" class="view-section active">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper blue">
+                                <i data-lucide="folder-search"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Total Research Jobs</span>
+                                <h3 id="stat-total-jobs" class="stat-value">0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper purple">
+                                <i data-lucide="globe"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Sources Collected</span>
+                                <h3 id="stat-total-sources" class="stat-value">0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper green">
+                                <i data-lucide="lightbulb"></i>
+                            </div>
+                            <div class="stat-details">
+                                <span class="stat-label">Findings Extracted</span>
+                                <h3 id="stat-total-findings" class="stat-value">0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Layout Grid -->
+                    <div class="dashboard-grid">
+                        <!-- Quick Start Card -->
+                        <div class="glass-card start-research-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Launch New Research</h3>
+                                <p class="card-subtitle">Initiate autonomous research on any topic instantly.</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input type="text" id="quick-research-input" placeholder="e.g., Quantum Computing Trends in 2026...">
+                                    <button id="quick-research-btn" class="btn btn-primary">
+                                        <span>Start Agent</span>
+                                        <i data-lucide="arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Overview Card -->
+                        <div class="glass-card system-info-card start-research-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Multi-Agent System Overview</h3>
+                            </div>
+                            <div class="card-body">
+                                <ul class="system-features-list">
+                                    <li>
+                                        <span class="icon">📋</span>
+                                        <div class="feature-text">
+                                            <strong>Planner Agent</strong>
+                                            <span>Generates target questions and outlines research scope.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="icon">🔍</span>
+                                        <div class="feature-text">
+                                            <strong>Search Agent</strong>
+                                            <span>Queries multiple search engines and fetches reference URLs.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="icon">📖</span>
+                                        <div class="feature-text">
+                                            <strong>Reader Agent</strong>
+                                            <span>Extracts page raw text and parses key details.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="icon">🧠</span>
+                                        <div class="feature-text">
+                                            <strong>Analyst Agent</strong>
+                                            <span>Identifies key opportunities, market trends, and risks.</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <span class="icon">✍️</span>
+                                        <div class="feature-text">
+                                            <strong>Writer Agent</strong>
+                                            <span>Synthesizes all insights to compile a PDF document.</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: NEW RESEARCH -->
+                <section id="view-new-research" class="view-section">
+                    <div class="research-input-container glass-card">
+                        <div class="card-header text-center">
+                            <h2>Start Autonomous Research</h2>
+                            <p class="text-muted">Enter a topic below. The multi-agent workflow will begin planning, retrieving sources, extracting facts, analyzing data, and generating a report.</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-form">
+                                <label for="research-topic-input">Research Topic</label>
+                                <textarea id="research-topic-input" rows="3" placeholder="Describe the topic you want to research in detail (e.g., The impact of Generative AI on software engineering productivity in 2026)"></textarea>
+                                <button id="start-research-btn" class="btn btn-primary btn-lg btn-block mt-3">
+                                    <i data-lucide="play"></i>
+                                    <span>Launch Research Agent</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Research Monitor Panel (Initially Hidden) -->
+                    <div id="research-monitor-panel" class="glass-card mt-4 hidden">
+                        <div class="card-header border-bottom">
+                            <div class="monitor-header-flex">
+                                <div>
+                                    <span class="badge badge-active" id="monitor-badge-status">Running</span>
+                                    <h3 id="monitor-topic-title" class="mt-2">Researching...</h3>
+                                    <p class="text-muted text-sm mt-1">Job ID: <code id="monitor-job-id">N/A</code></p>
+                                </div>
+                                <div class="monitor-actions hidden" id="monitor-completed-actions">
+                                    <button class="btn btn-success" id="monitor-view-report-btn">
+                                        <i data-lucide="file-text"></i>
+                                        <span>View Generated Report</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Progress Bar -->
+                            <div class="progress-section">
+                                <div class="progress-info">
+                                    <span>Workflow Progress</span>
+                                    <span id="monitor-progress-percentage">0%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill" id="monitor-progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Workflow Timeline -->
+                            <div class="workflow-timeline mt-4">
+                                <div class="timeline-item" id="step-planning">
+                                    <div class="timeline-marker"><i data-lucide="clipboard-list"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Planning Phase</h4>
+                                        <p>Analyzing topic, generating secondary questions, and establishing research strategy.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item" id="step-collecting">
+                                    <div class="timeline-marker"><i data-lucide="search"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Source Retrieval</h4>
+                                        <p>Searching the web, identifying relevant literature, news, and references.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item" id="step-extracting">
+                                    <div class="timeline-marker"><i data-lucide="book-open"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Fact Extraction</h4>
+                                        <p>Analyzing source documents and extracting key findings, statistics, and statements.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item" id="step-analyzing">
+                                    <div class="timeline-marker"><i data-lucide="brain"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Data Synthesis & Analysis</h4>
+                                        <p>Structuring facts into market trends, opportunities, risk assessments, and executive summaries.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item" id="step-writing">
+                                    <div class="timeline-marker"><i data-lucide="file-text"></i></div>
+                                    <div class="timeline-content">
+                                        <h4>Report Composition</h4>
+                                        <p>Formatting the findings, styling the analysis, and writing a professional PDF document.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: RESEARCH ARCHIVE -->
+                <section id="view-archive" class="view-section">
+                    <div class="glass-card">
+                        <div class="card-header border-bottom">
+                            <div class="archive-header-flex">
+                                <h3 class="card-title">Research History & Archive</h3>
+                                <div class="search-box-wrapper">
+                                    <i data-lucide="search"></i>
+                                    <input type="text" id="archive-search-input" placeholder="Search archive by topic...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="archive-list" id="archive-jobs-container">
+                                <!-- Dynamic archive cards -->
+                                <div class="text-center py-5 text-muted">Loading archive history...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: ANALYTICS -->
+                <section id="view-analytics" class="view-section">
+                    <div class="analytics-charts-grid">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Sources Collected per Research</h3>
+                            </div>
+                            <div class="card-body chart-container">
+                                <canvas id="chart-sources"></canvas>
+                            </div>
+                        </div>
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Findings Extracted per Research</h3>
+                            </div>
+                            <div class="card-body chart-container">
+                                <canvas id="chart-findings"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card mt-4">
+                        <div class="card-header">
+                            <h3 class="card-title">Detailed Metrics Table</h3>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="custom-table" id="analytics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Research Topic</th>
+                                        <th>Status</th>
+                                        <th>Sources Count</th>
+                                        <th>Findings Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analytics-table-tbody">
+                                    <!-- Dynamic rows -->
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">No research data available.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: REPORT VIEWER (DYNAMIC DETAILS) -->
+                <section id="view-report" class="view-section">
+                    <div class="report-viewer-header glass-card mb-4">
+                        <div class="report-header-flex">
+                            <div>
+                                <a href="#" class="back-link" id="report-back-btn">
+                                    <i data-lucide="arrow-left"></i>
+                                    <span>Back to Archive</span>
+                                </a>
+                                <h2 id="report-topic-heading" class="mt-2">Research Topic Summary</h2>
+                                <p class="text-muted text-sm mt-1">Job ID: <code id="report-job-id-text">loading...</code></p>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn btn-primary" id="report-download-pdf-btn">
+                                    <i data-lucide="download"></i>
+                                    <span>Download PDF Report</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report Content Tabs -->
+                    <div class="report-tabs-container">
+                        <div class="report-tabs">
+                            <button class="tab-btn active" data-tab="summary">Executive Summary</button>
+                            <button class="tab-btn" data-tab="findings">Findings (<span id="tab-count-findings">0</span>)</button>
+                            <button class="tab-btn" data-tab="sources">Sources (<span id="tab-count-sources">0</span>)</button>
+                        </div>
+
+                        <!-- Tab View Content -->
+                        <div class="tab-viewport glass-card mt-3">
+                            <!-- TAB: Summary -->
+                            <div class="tab-pane active" id="tab-pane-summary">
+                                <div class="summary-section">
+                                    <h3 class="pane-subtitle"><i data-lucide="file-text"></i> Executive Synthesis</h3>
+                                    <p id="report-summary-text" class="summary-paragraph">Loading summary...</p>
+                                </div>
+                                <div class="analysis-matrix mt-4">
+                                    <div class="matrix-card trend-card">
+                                        <h4><i data-lucide="trending-up"></i> Market Trends</h4>
+                                        <ul id="report-trends-list" class="matrix-list">
+                                            <!-- Dynamic Trends -->
+                                        </ul>
+                                    </div>
+                                    <div class="matrix-card opportunity-card">
+                                        <h4><i data-lucide="award"></i> Key Opportunities</h4>
+                                        <ul id="report-opportunities-list" class="matrix-list">
+                                            <!-- Dynamic Opportunities -->
+                                        </ul>
+                                    </div>
+                                    <div class="matrix-card risk-card">
+                                        <h4><i data-lucide="alert-triangle"></i> Strategic Risks</h4>
+                                        <ul id="report-risks-list" class="matrix-list">
+                                            <!-- Dynamic Risks -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB: Findings -->
+                            <div class="tab-pane" id="tab-pane-findings">
+                                <h3 class="pane-subtitle mb-3"><i data-lucide="lightbulb"></i> Extracted Facts & Observations</h3>
+                                <div id="report-findings-container" class="findings-list">
+                                    <!-- Dynamic findings list -->
+                                </div>
+                            </div>
+
+                            <!-- TAB: Sources -->
+                            <div class="tab-pane" id="tab-pane-sources">
+                                <h3 class="pane-subtitle mb-3"><i data-lucide="globe"></i> Web References & Sources</h3>
+                                <div id="report-sources-container" class="sources-accordion">
+                                    <!-- Dynamic sources accordion -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+              </div>
+          </main>
+      </div>
+
+    <!-- Forgot Password Modal Overlay -->
+    <div id="forgot-password-modal" class="login-overlay hidden" style="background: rgba(2, 6, 23, 0.95); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+        <div class="login-card glass-card" style="max-width: 440px; width: 100%; padding: 2.5rem; text-align: center;">
+            <!-- PHASE 1: ENTER EMAIL -->
+            <div id="recovery-email-phase">
+                <div class="login-header">
+                    <div class="login-logo-wrapper" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; margin: 0 auto 1.5rem auto;">
+                        <i data-lucide="key-round" class="login-logo-svg"></i>
+                    </div>
+                    <h2>Reset Password</h2>
+                    <p>Enter your email to request recovery instructions</p>
+                </div>
+                <div class="login-body mt-4">
+                    <div id="recovery-email-error-msg" class="login-error hidden" style="margin-bottom: 1rem;">Email address not registered.</div>
+                    <div class="form-group" style="text-align: left;">
+                        <label for="recovery-email">Email Address</label>
+                        <input type="email" id="recovery-email" placeholder="name@example.com" required>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <button id="recovery-cancel-btn" class="btn btn-secondary" style="flex: 1;">Cancel</button>
+                        <button id="recovery-send-btn" class="btn btn-primary" style="flex: 2;">
+                            <span>Get Code</span>
+                            <i data-lucide="send"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHASE 2: OVERRIDE PASSWORD -->
+            <div id="recovery-reset-phase" class="hidden">
+                <div class="login-header">
+                    <div class="login-logo-wrapper" style="background: rgba(34, 197, 94, 0.1); color: #22c55e; margin: 0 auto 1.5rem auto;">
+                        <i data-lucide="shield-check" class="login-logo-svg"></i>
+                    </div>
+                    <h2>Enter Recovery Code</h2>
+                    <p>Verify simulated token and choose a new password</p>
+                </div>
+                <div class="login-body mt-4">
+                    <div id="recovery-reset-error-msg" class="login-error hidden" style="margin-bottom: 1rem;">Invalid reset code.</div>
+                    <div class="form-group" style="text-align: left;">
+                        <label for="recovery-token">Simulated Reset Token</label>
+                        <input type="text" id="recovery-token" placeholder="RESET-XXXXXX" required>
+                    </div>
+                    <div class="form-group mt-3" style="text-align: left;">
+                        <label for="recovery-new-password">New Password</label>
+                        <div style="position: relative; display: flex; align-items: center; width: 100%;">
+                            <input type="password" id="recovery-new-password" placeholder="Create a strong password" required style="width: 100%; padding-right: 2.5rem;">
+                            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('recovery-new-password', this)" style="position: absolute; right: 0.75rem; background: none; border: none; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button id="recovery-submit-btn" class="btn btn-primary btn-block mt-4">
+                        <span>Change Password</span>
+                        <i data-lucide="check-circle"></i>
+                    </button>
+                    <p class="auth-toggle-text mt-3 text-center text-sm text-muted">
+                        Didn't get the code? <a href="#" id="recovery-resend-btn" class="auth-toggle-link" style="color: #a855f7; font-weight: 500;">Resend Code</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOCK EMAIL NOTIFICATION TOAST -->
+    <div id="mock-email-notification" class="hidden" style="position: fixed; bottom: 2rem; right: 2rem; width: 360px; padding: 1.25rem; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: var(--border-radius-md); box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 10001; text-align: left; animation: floatUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+            <i data-lucide="mail" style="color: #a855f7; width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;"></i>
+            <div style="flex-grow: 1;">
+                <strong style="color: #fff; font-size: 0.9rem; display: block;">Local Mail Simulator</strong>
+                <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 2px;">To: <span id="mock-email-to" style="color: #fff;">user@example.com</span></span>
+                <p style="font-size: 0.8rem; color: #cbd5e1; margin: 0.5rem 0 0 0; background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 4px; border: 1px dashed rgba(255,255,255,0.1);">
+                    Simulated reset token: <code id="mock-email-token" style="color: #a855f7; font-weight: bold; font-size: 0.85rem;">RESET-123456</code>
+                </p>
+                <span style="font-size: 0.7rem; color: #64748b; display: block; margin-top: 0.5rem;">Copy and paste this token to reset your password.</span>
+            </div>
+            <button onclick="document.getElementById('mock-email-notification').classList.add('hidden')" style="background: none; border: none; color: #64748b; cursor: pointer; padding: 0;"><i data-lucide="x" style="width: 16px; height: 16px;"></i></button>
+        </div>
+    </div>
+
+    <!-- Script Entry -->
+    <script src="app.js?v=11"></script>
+</body>
+</html>

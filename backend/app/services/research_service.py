@@ -39,7 +39,7 @@ from app.repositories.analysis_repository import (
 from app.services.pdf_service import (
     PDFService
 )
-from threading import Thread
+from fastapi import BackgroundTasks
 
 
 class ResearchService:
@@ -312,39 +312,81 @@ class ResearchService:
         .get_by_job_id(job_id)
     )
 
-    def get_all_jobs(self):
-
-        return (
-        self.repository
-        .get_all()
-        )
+    def get_all_jobs(self, user_id: str = None):
+        if user_id and user_id != "admin":
+            from sqlalchemy import desc
+            return (
+                self.repository.db.query(ResearchJob)
+                .filter(ResearchJob.user_id == user_id)
+                .order_by(desc(ResearchJob.created_at))
+                .all()
+            )
+        return self.repository.get_all()
     
 
-    def get_stats(self):
-
-        jobs = self.repository.get_all()
+    def get_stats(self, user_id: str = None):
+        if user_id and user_id != "admin":
+            jobs = (
+                self.repository.db.query(ResearchJob)
+                .filter(ResearchJob.user_id == user_id)
+                .all()
+            )
+        else:
+            jobs = self.repository.get_all()
 
         return {
             "total_jobs": len(jobs),
             "total_sources": sum(
-                j.source_count
+                j.source_count or 0
                 for j in jobs
             ),
             "total_findings": sum(
-                j.finding_count
+                j.finding_count or 0
                 for j in jobs
             )
-
         }
+    
+    def delete_job(self, job_id: str) -> bool:
+        import os
+        from app.models.research_source import ResearchSource
+        from app.models.research_finding import ResearchFinding
+        from app.models.research_analysis import ResearchAnalysis
+        from app.models.research_report import ResearchReport
+
+        job = self.repository.get_by_id(job_id)
+        if not job:
+            return False
+
+        # Delete the PDF file if it exists
+        if job.pdf_path:
+            try:
+                if os.path.exists(job.pdf_path):
+                    os.remove(job.pdf_path)
+            except Exception as e:
+                print(f"Error removing PDF file: {e}")
+
+        # Cascading deletes for database associations
+        self.repository.db.query(ResearchSource).filter(ResearchSource.job_id == job_id).delete(synchronize_session=False)
+        self.repository.db.query(ResearchFinding).filter(ResearchFinding.job_id == job_id).delete(synchronize_session=False)
+        self.repository.db.query(ResearchAnalysis).filter(ResearchAnalysis.job_id == job_id).delete(synchronize_session=False)
+        self.repository.db.query(ResearchReport).filter(ResearchReport.job_id == job_id).delete(synchronize_session=False)
+
+        # Delete job row itself
+        self.repository.db.delete(job)
+        self.repository.db.commit()
+        return True
     
 
     def create_job(
         self,
-        topic: str
+        topic: str,
+        user_id: str,
+        background_tasks: BackgroundTasks
     ):
 
         job = ResearchJob(
             id=str(uuid.uuid4()),
+            user_id=user_id,
             topic=topic,
             status="created",
             progress=0,
@@ -353,9 +395,10 @@ class ResearchService:
 
         self.repository.create(job)
 
-        Thread(
-            target=self.run_workflow,
-            args=(job.id, topic)
-        ).start()
+        background_tasks.add_task(
+            self.run_workflow,
+            job.id,
+            topic
+        )
 
         return job
