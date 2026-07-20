@@ -1,220 +1,147 @@
-# 🤖 Autonomous Research Agent
+# ⚡ ResearchX.AI — Autonomous Multi-Agent Intelligence Platform
 
-An AI-powered Multi-Agent Research Platform that autonomously researches any topic, analyzes information from multiple sources, generates insights, and creates professional PDF reports.🤖 Autonomous Research Agent
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-Agentic_AI-FF6F00?style=for-the-badge)](https://langchain-ai.github.io/langgraph/)
+[![Groq](https://img.shields.io/badge/Groq-Llama_3.3_70B-f55036?style=for-the-badge)](https://groq.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
----
-
-## 🚀 Features
-
-### 🔍 Autonomous Research
-- Enter any research topic
-- AI automatically creates a research plan
-- Collects information from multiple web sources
-- Extracts key findings
-
-### 🧠 Multi-Agent Architecture
-The platform uses specialized AI agents:
-
-Planner Agent
-↓
-Search Agent
-↓
-Reader Agent
-↓
-Analyst Agent
-↓
-Writer Agent
-
-### 📊 Advanced Analysis
-- Executive Summary
-- Market Trends
-- Opportunities
-- Risks
-- Key Insights
-
-### 📄 Professional Reports
-- Auto-generated research reports
-- PDF export support
-- Research history tracking
-
-### 📈 Dashboard
-- Total Research Jobs
-- Sources Collected
-- Findings Extracted
-- Progress Tracking
+An enterprise-grade, autonomous multi-agent research platform. **ResearchX.AI** plans, searches, scrapes, synthesizes market trends, SWOT indicators, and generates production-ready intelligence reports in seconds using coordinated AI agent networks.
 
 ---
 
-# 🏗️ Tech Stack
+## 🌟 Key Features
 
-## Backend
-- FastAPI
-- LangGraph
-- LangChain
-- SQLAlchemy
-- SQLite
-- BeautifulSoup4
+### 🤖 Autonomous LangGraph Agent Network
+- **Planner Agent**: Deconstructs complex user prompts into targeted search strategies.
+- **Collector Agent**: Scrapes web sources and extracts live content.
+- **Extractor Agent**: Distills core findings, market trends, opportunities, and risks using LLMs.
+- **Writer Agent**: Compiles comprehensive markdown research reports with full source citations.
 
-## Frontend
-- Streamlit
-- Pandas
+### 🛡️ System Administration & User Management
+- **Split-Screen Admin Console**: Dedicated dashboard (`admin.html`) to audit research runs, monitor system health, and manage user accounts.
+- **User Block & Suspension Guards**: Instant account suspension (`is_blocked = True`) that terminates active sessions across the network.
+- **Cascading Database Purge**: Deleting a user automatically purges associated research jobs, findings, and reports to keep storage lean.
 
-## AI/LLM
-- Groq API
-- Llama Models
+### 🔒 Modern Security & Password Recovery
+- **Email-Based Authentication**: Strict regex format validations on user login, registration, and admin forms.
+- **SMTP Password Reset Engine**: Direct password reset token emails with inline link routing and fallback simulator toast support.
+- **JWT Cryptographic Sessions**: HMAC-SHA256 signed access tokens with custom claim validation.
 
-## Other Tools
-- ReportLab
-- Requests
-- Pydantic
+### 🐘 Dual Database Engine (PostgreSQL & SQLite)
+- Production support for **PostgreSQL** (`psycopg2-binary`) alongside local SQLite development setups.
+- Automated SQL migration fallbacks.
 
----
-
-# 🧠 Workflow
-
-1. User enters a research topic
-2. Planner Agent creates research plan
-3. Search Agent gathers sources
-4. Reader Agent extracts findings
-5. Analyst Agent performs analysis
-6. Writer Agent generates final report
-7. PDF report is created
-8. Results are stored in database
+### 🎨 Tactile & Responsive UI
+- **Physics-Based Scale Popups**: Smooth card transitions using custom cubic-bezier curves (`cubic-bezier(0.34, 1.56, 0.64, 1)`).
+- **Password Visibility Toggles**: Interactive eye-icon toggles on all login forms.
 
 ---
 
-# 📂 Project Structure
+## 🏗️ Architecture & Data Flow
 
-AUTONOMOUS-RESEARCH-AGENT
-│
-├── backend/
-│   ├── app/
-│   │   ├── agents/
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── models/
-│   │   ├── providers/
-│   │   ├── repositories/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   ├── state/
-│   │   ├── utils/
-│   │   ├── workflows/
-│   │   └── main.py
-│   │
-│   ├── tests/
-│   ├── requirements.txt
-│   └── .env.example
-│
-├── frontend/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   ├── 🏠_Dashboard.py
-│   └── requirements.txt
-│
-├── docs/
-├── docker/
-├── screenshots/
-│
-├── .gitignore
-├── docker-compose.yml
-├── README.md
-└── LICENSE
+```mermaid
+graph TD
+    A[Frontend Dashboard: index.html] -->|HTTP Requests| B[FastAPI Backend: app.main]
+    C[Admin Console: admin.html] -->|HTTP Requests| B
+    B -->|SQLAlchemy ORM| D[(PostgreSQL / SQLite)]
+    B -->|LangGraph Workflows| E[LLM Providers: Groq Llama 3.3]
+    E -->|Scraped Web Content| B
+```
+
 ---
 
-# ⚙️ Quick Setup
+## 🛠️ Tech Stack
 
-## 1. Clone Repository
+| Layer | Technology |
+| :--- | :--- |
+| **Backend Framework** | FastAPI (Python 3.11+) |
+| **Agentic Workflows** | LangGraph, LangChain |
+| **Database** | PostgreSQL (`psycopg2-binary`) / SQLite |
+| **AI / LLM** | Groq API (`llama-3.3-70b-versatile`), Ollama, OpenAI |
+| **Frontend** | HTML5, Vanilla CSS3 (Glassmorphism & Micro-animations), Modern JavaScript (ES6+) |
+| **Security & Auth** | Custom HMAC-SHA256 JWT, Passlib (BCrypt) |
 
+---
+
+## ⚙️ Quick Start Guide
+
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/autonomous-research-agent.git
+git clone https://github.com/saimhaske36/autonomous-research-agent.git
 cd autonomous-research-agent
 ```
 
-## 2. Backend Setup
-
+### 2. Set Up Virtual Environment & Dependencies
 ```bash
-cd backend
-
+# Create virtual environment
 python -m venv .venv
 
-.venv\Scripts\activate
+# Activate environment (Windows)
+.\.venv\Scripts\activate
 
-pip install -r requirements.txt
-
-uvicorn app.main:app --reload
+# Install dependencies
+pip install -r backend/requirements.txt
 ```
 
-## 3. Frontend Setup
-
-Open a new terminal:
-
-```bash
-cd frontend
-
-python -m venv .venv
-
-.venv\Scripts\activate
-
-pip install -r requirements.txt
-
-streamlit run 🏠_Dashboard.py
-```
-
-## 4. Environment Variables
-
-Create a `.env` file inside the `backend` folder:
+### 3. Environment Configuration
+Create a `.env` file in the root directory:
 
 ```env
-GROQ_API_KEY=your_api_key
+APP_NAME=ResearchX.AI
+APP_VERSION=1.0.0
+DEBUG=True
+API_PREFIX=/api/v1
 
-DATABASE_URL=sqlite:///research.db
+# Database Configuration (PostgreSQL or SQLite)
+DATABASE_URL=postgresql://postgres:password@localhost:5432/research_db
+# Or for SQLite: DATABASE_URL=sqlite:///./research.db
+
+# LLM Keys
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=llama-3.3-70b-versatile
+LLM_PROVIDER=groq
+TAVILY_API_KEY=your_tavily_api_key
+
+# Admin Credentials
+ADMIN_USERNAME=saimhaske36@gmail.com
+ADMIN_PASSWORD=Pass@12345
+JWT_SECRET_KEY=your_custom_jwt_secret_key
 ```
 
-## Access
+### 4. Run the Application
+Start the FastAPI server (it automatically serves both the backend API and frontend interfaces):
 
-**Frontend:** http://localhost:8501
-
-**Backend:** http://127.0.0.1:8000
-
-**API Docs:** http://127.0.0.1:8000/docs
-
-# 📊 Sample Research Output
-
-✅ Executive Summary
-
-✅ Market Trends
-
-✅ Opportunities
-
-✅ Risks
-
-✅ Findings
-
-✅ Source References
-
-✅ PDF Report
+```bash
+uvicorn app.main:app --reload --cwd backend
+```
 
 ---
 
-# 🎯 Future Enhancements
+## 🌐 Application Access Points
 
-- Real-Time Agent Progress Tracking
-- RAG-based Knowledge Memory
-- Multi-LLM Support
-- Research Report Comparison
-- Team Collaboration
-- Cloud Deployment
-- Citation Management
-- Interactive Charts
+- **User Portal**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+- **Admin Console**: [http://127.0.0.1:8000/admin.html](http://127.0.0.1:8000/admin.html)
+- **FastAPI Interactive Docs**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
 
-# 👨‍💻 Author
+## 🚀 Live Cloud Deployment (Render.com)
 
-Sai Mhaske
+1. Push your repository to GitHub.
+2. Create a Managed PostgreSQL Database on [Render.com](https://render.com).
+3. Create a **Web Service** on Render connected to your repo:
+   - **Build Command**: `pip install -r backend/requirements.txt`
+   - **Start Command**: `cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+4. Set Environment Variables in Render dashboard (`DATABASE_URL`, `GROQ_API_KEY`, etc.).
 
 ---
 
-# ⭐ If you found this project useful, give it a star.
+## 👨‍💻 Author
+
+**Sai Mhaske**
+- GitHub: [@saimhaske36](https://github.com/saimhaske36)
+
+---
+
+⭐ **If you find ResearchX.AI helpful, give it a star on GitHub!**
